@@ -31,7 +31,11 @@ type BaseContainer struct {
 }
 
 func (bc *BaseContainer) Append(containers ...Container) {
-	bc.subContainers = append(bc.subContainers, containers...)
+	for _, c := range containers {
+		if c != Nil {
+			bc.subContainers = append(bc.subContainers, c)
+		}
+	}
 }
 
 func (bc *BaseContainer) DrawBorder(width, height uint) (uint, uint, pixel.PixelMap, error) {
@@ -56,9 +60,9 @@ func (bc *BaseContainer) SubContainers() []Container {
 }
 
 func NewBaseContainer(containers []Container) *BaseContainer {
-	return &BaseContainer{
-		subContainers: containers,
-	}
+	bc := &BaseContainer{}
+	bc.Append(containers...)
+	return bc
 }
 
 ////////////////////////BaseFrameContainer////////////////////

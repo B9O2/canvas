@@ -56,7 +56,7 @@ func TestCanvas(t *testing.T) {
 	//hs.SetFrame(0, 0, 15, 15)
 	//hs.SetBorder(pixel.Space, pixel.Dot)
 
-	all := containers.NewVStack(hs)
+	all := containers.NewVStack(hs, containers.Nil)
 	//all.SetBorder(pixel.NewPixel('*', nil), pixel.Dot)
 
 	pm, err := all.Draw(81, 15)
