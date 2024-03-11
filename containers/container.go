@@ -109,6 +109,7 @@ func (bc *BaseFrameContainer) SetPadding(padding pixel.Pixel) {
 
 // DrawBorder FrameContainer的DrawBorder还会绘制Padding
 func (bc *BaseFrameContainer) DrawBorder(width, height uint) (uint, uint, pixel.PixelMap, error) {
+	//fmt.Printf("%dx%d\n", width, height)
 	width, height, pm, err := bc.BaseContainer.DrawBorder(width, height)
 	if err != nil {
 		return width, height, pm, err
@@ -125,6 +126,7 @@ func (bc *BaseFrameContainer) DrawBorder(width, height uint) (uint, uint, pixel.
 		height = height - 2*bc.vPadding
 	}
 
+	//fmt.Printf("HPadding %d,VPadding %d -> %dx%d\n", bc.hPadding, bc.vPadding, width, height)
 	err = pm.DrawRectangle(bc.hPadding, bc.vPadding, width, height, bc.padding)
 	return width, height, pm, err
 }

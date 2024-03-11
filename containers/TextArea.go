@@ -30,11 +30,11 @@ func (ta *TextArea) Draw(width, height uint) (pixel.PixelMap, error) {
 	} else {
 		y = (height - lines) / 2
 	}
-	if len(parts) > 1 || ta.aliginLeft {
+	if lines > 1 || ta.aliginLeft {
 		for i, part := range parts {
 			pm.DrawLine(0, y+uint(i), PixelString(part, ta.color), false)
 		}
-	} else {
+	} else if lines == 1 {
 		x := (width - uint(len(parts[0]))) / 2
 		err = pm.DrawLine(x, y, PixelString(parts[0], ta.color), false)
 		if err != nil {
