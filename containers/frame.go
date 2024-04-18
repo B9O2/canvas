@@ -13,6 +13,16 @@ func (r Range) Max() uint {
 	return r.max
 }
 
+func NewRange(from, to uint) Range {
+	if from > to {
+		from, to = to, from
+	}
+	return Range{
+		min: from,
+		max: to,
+	}
+}
+
 type Frame struct {
 	width  Range
 	height Range

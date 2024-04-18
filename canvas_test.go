@@ -32,34 +32,40 @@ var TriangleArt = ` _____  _  _____
        '-'`
 
 func TestCanvas(t *testing.T) {
-	text := containers.NewTextArea(strings.Repeat("The wheel turns, nothing is ever new.", 1))
-	//text.SetFrame(0, 0, 1, 1)
+	//text := containers.NewTextArea(strings.Repeat("The wheel turns, nothing is ever new.", 1))
 	//text.SetAliginLeft(true)
 	//text.SetBorder(pixel.Space, pixel.Dot)
 
-	art := containers.NewAsciiArt(strings.Split(TriangleArt, "\n"))
+	art := containers.NewHStack(containers.NewAsciiArt(strings.Split(TriangleArt, "\n")))
+	art.SetFrame(0, 0, 15, 0)
 	//art.SetBorder(pixel.Space, pixel.Dot)
 
 	box := containers.NewHStack()
-	box.SetBorder(pixel.NewPixel('*', nil))
 	box.SetPadding(pixel.Dot)
+	//box.SetPadding(pixel.Dot)
 
-	vs := containers.NewVStack(box, box, box)
-	vs.SetBorder(pixel.Space)
-	vs.SetPadding(pixel.Dot)
+	// vs := containers.NewVStack(box, box, box)
+	// vs.SetBorder(pixel.Space)
+	// vs.SetPadding(pixel.Dot)
 
-	left := containers.NewHStack(box, text, box)
-	left.SetBorder(pixel.Space)
-	left.SetPadding(pixel.Dot)
+	// left := containers.NewHStack(box, text, box)
+	// //left.SetBorder(pixel.Space)
+	// left.SetPadding(pixel.Dot)
 
-	hs := containers.NewZStack(art, text)
+	hs := containers.NewVStack(nil, nil)
 	//hs.SetFrame(0, 0, 15, 15)
-	//hs.SetBorder(pixel.Space, pixel.Dot)
+	hs.SetBorder(pixel.Dot)
 
-	all := containers.NewVStack(hs, containers.Nil)
+	var vs *containers.VStack
+
+	all := containers.NewHStack(vs, vs, hs)
+	//all.SetBorder()
+	//all.SetPadding(pixel.Dot)
+	// all.SetVPadding(1)
+	// all.SetHPadding(1)
 	//all.SetBorder(pixel.NewPixel('*', nil), pixel.Dot)
 
-	pm, err := all.Draw(81, 15)
+	pm, err := all.Draw(80, 25)
 	if err != nil {
 		t.Fatal(err)
 	}
