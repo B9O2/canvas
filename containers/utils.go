@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/B9O2/canvas/pixel"
+	"github.com/mattn/go-runewidth"
 )
 
 func SpaceAllocate(ranges []Range, length uint) ([]uint, error) {
@@ -197,15 +198,40 @@ func PixelString(text string, color any) []pixel.Pixel {
 
 func SplitWithLength(text string, length uint) []string {
 	var result []string
-	str := []rune(text)
-	for {
-		if uint(len(str)) <= length {
-			result = append(result, string(str))
-			break
-		} else {
-			result = append(result, string(str[:length]))
-			str = str[length:]
+	if length == 0 {
+		if text == "" {
+			return []string{}
 		}
+		return []string{text} // Or handle as an error, or return a list of single-character strings
+	}
+
+	runes := []rune(text)
+	currentLineWidth := uint(0)
+	start := 0
+	for i, r := range runes {
+		runeWidth := uint(runewidth.RuneWidth(r))
+
+		if runeWidth > length { // Single character wider than limit
+			if start < i { // Add preceding characters as a line
+				result = append(result, string(runes[start:i]))
+			}
+			result = append(result, string(r)) // Add wide character as its own line
+			currentLineWidth = 0
+			start = i + 1
+			continue
+		}
+
+		if currentLineWidth+runeWidth > length {
+			result = append(result, string(runes[start:i]))
+			start = i
+			currentLineWidth = runeWidth
+		} else {
+			currentLineWidth += runeWidth
+		}
+	}
+
+	if start < len(runes) {
+		result = append(result, string(runes[start:]))
 	}
 	return result
 }

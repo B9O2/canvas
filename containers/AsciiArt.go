@@ -2,6 +2,7 @@ package containers
 
 import (
 	"github.com/B9O2/canvas/pixel"
+	"github.com/mattn/go-runewidth"
 )
 
 type AsciiArt struct {
@@ -30,15 +31,34 @@ func (art *AsciiArt) Draw(width, height uint) (pixel.PixelMap, error) {
 
 	artWidth := uint(0)
 	for id, line := range lines {
-		l := uint(len(line))
-		if l > artWidth {
-			artWidth = l
+		currentLineWidth := uint(runewidth.StringWidth(line))
+		if currentLineWidth > artWidth {
+			artWidth = currentLineWidth
 		}
-		if l > width {
-			line = line[:width]
+
+		if currentLineWidth > width {
+			// Truncate line based on display width
+			truncatedLine := ""
+			currentTruncatedWidth := uint(0)
+			for _, r := range []rune(line) {
+				runeW := uint(runewidth.RuneWidth(r))
+				if currentTruncatedWidth+runeW > width {
+					break
+				}
+				truncatedLine += string(r)
+				currentTruncatedWidth += runeW
+			}
+			lines[id] = truncatedLine
+			// Update artWidth if the original line was the widest and got truncated
+			if currentLineWidth == artWidth {
+				artWidth = currentTruncatedWidth
+			}
+		} else {
+			lines[id] = line
 		}
-		lines[id] = line
 	}
+
+	// After processing all lines, ensure artWidth does not exceed the container's width
 	if artWidth > width {
 		artWidth = width
 	}

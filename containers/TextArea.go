@@ -2,6 +2,7 @@ package containers
 
 import (
 	"github.com/B9O2/canvas/pixel"
+	"github.com/mattn/go-runewidth"
 )
 
 type TextArea struct {
@@ -35,7 +36,7 @@ func (ta *TextArea) Draw(width, height uint) (pixel.PixelMap, error) {
 			pm.DrawLine(0, y+uint(i), PixelString(part, ta.color), false)
 		}
 	} else if lines == 1 {
-		x := (width - uint(len(parts[0]))) / 2
+		x := (width - uint(runewidth.StringWidth(parts[0]))) / 2
 		err = pm.DrawLine(x, y, PixelString(parts[0], ta.color), false)
 		if err != nil {
 			return pm, err
