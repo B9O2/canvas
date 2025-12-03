@@ -53,7 +53,10 @@ func SpaceAllocate(ranges []Range, length uint) ([]uint, error) {
 
 	//Calculate
 	remainingSpace := float32(length - totalMinLength)
-	for remainingSpace > 0 {
+
+	for remainingSpace > 0.001 {
+		lastRemainingSpace := remainingSpace
+
 		for i := range idRanges {
 			r := idRanges[i]
 			ids := FindNums(idRanges, func(v RangeWithRawID) bool {
@@ -111,6 +114,12 @@ func SpaceAllocate(ranges []Range, length uint) ([]uint, error) {
 					}
 				}
 			}
+		}
+
+		if remainingSpace >= lastRemainingSpace {
+			return nil, fmt.Errorf(
+				"space allocation failed: cannot allocate remaining space",
+			)
 		}
 	}
 
