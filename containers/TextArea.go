@@ -6,13 +6,13 @@ import (
 
 type TextArea struct {
 	*BaseContainer
-	text       string
-	color      any
-	aliginLeft bool
+	text      string
+	color     any
+	alignLeft bool
 }
 
-func (ta *TextArea) SetAliginLeft(enabled bool) {
-	ta.aliginLeft = enabled
+func (ta *TextArea) SetAlignLeft(enabled bool) {
+	ta.alignLeft = enabled
 }
 
 func (ta *TextArea) Draw(width, height uint) (pixel.PixelMap, error) {
@@ -30,7 +30,7 @@ func (ta *TextArea) Draw(width, height uint) (pixel.PixelMap, error) {
 	} else {
 		y = (height - lines) / 2
 	}
-	if lines > 1 || ta.aliginLeft {
+	if lines > 1 || ta.alignLeft {
 		for i, part := range parts {
 			pm.DrawLine(0, y+uint(i), PixelString(part, ta.color), false)
 		}
